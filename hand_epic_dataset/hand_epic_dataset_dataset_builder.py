@@ -14,9 +14,6 @@ data_path_rgb_epic = "/datasets/epic100_2024-01-04_1913/frames"
 
 def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
     """Yields episodes for list of data paths."""
-    # the line below needs to be *inside* generate_examples so that each worker creates it's own model
-    # creating one shared model outside this function would cause a deadlock
-    # _embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-large/5")
 
     def _parse_examples(demo_dict):
         # load raw data --> this should change for your dataset
@@ -26,7 +23,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
         episode = []
         for i, filepath in enumerate(episode_paths):
             print("processing image: ", filepath)
-            epic_id = path_to_id(episode_paths, data_path_rgb_epic)
+            epic_id = path_to_id(filepath, data_path_rgb_epic)
             im = Image.open(filepath)
             original_width, original_height = im.size
             new_height, new_width = 224, 224
