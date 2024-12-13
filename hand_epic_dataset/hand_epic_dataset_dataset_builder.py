@@ -179,13 +179,6 @@ class HandBridgeDataset(MultiThreadedDatasetBuilder):
 
                 }),
                 'episode_metadata': tfds.features.FeaturesDict({
-                    'file_path': tfds.features.Text(
-                        doc='Path to the original data file.'
-                    ),
-                    'episode_id': tfds.features.Scalar(
-                        dtype=np.int32,
-                        doc='ID of episode in file_path.'
-                    ),
                 }),
             }))
 
