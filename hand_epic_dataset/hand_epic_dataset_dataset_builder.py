@@ -71,12 +71,12 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                         has_hand_left = True
                         #scale the 2d point to the new image size
                         tcp_point_2d_left = (tcp_point_2d_left * np.array([scale_x, scale_y])).astype(float)
-                        tcp_point_3d_left = np.hstack((tcp_point_2d_left, depth_kp_avg))
+                        tcp_point_3d_left = np.hstack((tcp_point_2d_left, depth_kp_avg)).astype(np.float32)
                     elif hand == 1:
                         tcp_point_2d_right = hand_keypoint[0][1]
                         has_hand_right = True
                         tcp_point_2d_right = (tcp_point_2d_right * np.array([scale_x, scale_y])).astype(float)
-                        tcp_point_3d_right = np.hstack((tcp_point_2d_right, depth_kp_avg))
+                        tcp_point_3d_right = np.hstack((tcp_point_2d_right, depth_kp_avg)).astype(np.float32)
 
             episode.append({
                                'observation': {
