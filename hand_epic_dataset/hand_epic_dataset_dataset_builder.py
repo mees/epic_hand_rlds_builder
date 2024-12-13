@@ -100,11 +100,13 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
             'episode_metadata': {
             }
         }
-
+        result = (str(episode_id), sample)  # Example return value, adjust based on your code
+        print("Return value len:", len(result))  # Debugging
         # if you want to skip an example for whatever reason, simply return None
         return str(episode_id), sample
-# for smallish datasets, use single-thread parsing
+    # for smallish datasets, use single-thread parsing
     for demo_dict in paths:
+        print("returned len:", len(_parse_examples(demo_dict)))
         for id, sample in _parse_examples(demo_dict):
             yield id, sample
 
