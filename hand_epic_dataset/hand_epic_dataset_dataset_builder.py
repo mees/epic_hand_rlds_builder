@@ -23,7 +23,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
         episode = []
         episode_id = None
         for i, filepath in enumerate(episode_paths):
-            print("processing image: ", filepath)
+            # print("processing image: ", filepath)
             epic_id = path_to_id(filepath, data_path_rgb_epic)
             if episode_id is None:
                 episode_id = epic_id  # Use the first epic_id as the episode ID
@@ -40,8 +40,8 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
             # Load the pickle file
                 with open(hand_keypoint_file_path, 'rb') as file:
                     hand_keypoint = pickle.load(file)
-                if not hand_keypoint:
-                    print("hand keypoint not found")
+                # if not hand_keypoint:
+                #     print("hand keypoint not found")
                     #continue
             else:
                 print("hand keypoint file not found")
