@@ -1,14 +1,10 @@
 from typing import Iterator, Tuple, Any
 
-import glob
 import numpy as np
 import tensorflow as tf
-import tensorflow_hub as hub
 import tensorflow_datasets as tfds
 from hand_epic_dataset.conversion_utils import MultiThreadedDatasetBuilder
-import json
 import os
-#import cv2
 from PIL import Image
 import pickle
 from utils import get_depth_point, path_to_id, list_files_in_directory
