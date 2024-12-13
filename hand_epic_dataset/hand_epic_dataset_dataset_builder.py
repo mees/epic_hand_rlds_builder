@@ -44,7 +44,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                 print("hand keypoint file not found")
                 exit()
                 # continue
-            depth_file = data_path_hand_depth_epic+filepath+".npy"
+            depth_file = data_path_hand_depth_epic+epic_id+".npy"
             if os.path.exists(depth_file):
                 depth_image = np.load(depth_file)
                 print("depth image shape: ", depth_image.shape)
