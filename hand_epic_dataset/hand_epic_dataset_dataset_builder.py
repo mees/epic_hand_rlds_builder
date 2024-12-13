@@ -21,9 +21,12 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
         episode_paths = demo_dict["file_paths"]
         # assemble episode --> here we're assuming demos so we set reward to 1 at the end
         episode = []
+        episode_id = None
         for i, filepath in enumerate(episode_paths):
             print("processing image: ", filepath)
             epic_id = path_to_id(filepath, data_path_rgb_epic)
+            if episode_id is None:
+                episode_id = epic_id  # Use the first epic_id as the episode ID
             im = Image.open(filepath)
             original_width, original_height = im.size
             new_height, new_width = 224, 224
@@ -47,7 +50,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
             depth_file = data_path_hand_depth_epic+epic_id+".npy"
             if os.path.exists(depth_file):
                 depth_image = np.load(depth_file)
-                print("depth image shape: ", depth_image.shape)
+                # print("depth image shape: ", depth_image.shape)
             else:
                 print("depth image not found: ", depth_file)
                 exit()
@@ -91,9 +94,18 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                                'is_terminal': i == (len(episode_paths) - 1),
                                'language_instruction': annotation,
                            })
+        # create output data sample
+        sample = {
+            'steps': episode,
+            'episode_metadata': {
+            }
+        }
+
+        # if you want to skip an example for whatever reason, simply return None
+        return str(episode_id), sample
 # for smallish datasets, use single-thread parsing
-    for sample in paths:
-        for id, sample in _parse_examples(sample):
+    for demo_dict in paths:
+        for id, sample in _parse_examples(demo_dict):
             yield id, sample
 
 
@@ -173,26 +185,6 @@ class HandBridgeDataset(MultiThreadedDatasetBuilder):
                     'episode_id': tfds.features.Scalar(
                         dtype=np.int32,
                         doc='ID of episode in file_path.'
-                    ),
-                    'has_image_0': tfds.features.Scalar(
-                        dtype=np.bool_,
-                        doc='True if image0 exists in observation, otherwise dummy value.'
-                    ),
-                    'has_image_1': tfds.features.Scalar(
-                        dtype=np.bool_,
-                        doc='True if image1 exists in observation, otherwise dummy value.'
-                    ),
-                    'has_image_2': tfds.features.Scalar(
-                        dtype=np.bool_,
-                        doc='True if image2 exists in observation, otherwise dummy value.'
-                    ),
-                    'has_image_3': tfds.features.Scalar(
-                        dtype=np.bool_,
-                        doc='True if image3 exists in observation, otherwise dummy value.'
-                    ),
-                    'has_language': tfds.features.Scalar(
-                        dtype=np.bool_,
-                        doc='True if language exists in observation, otherwise empty string.'
                     ),
                 }),
             }))
