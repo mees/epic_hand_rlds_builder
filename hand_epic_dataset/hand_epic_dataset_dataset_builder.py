@@ -43,7 +43,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                 #     print("hand keypoint not found")
                     #continue
             else:
-                print("hand keypoint file not found")
+                print("hand keypoint file not found: ", hand_keypoint_file_path)
                 exit()
                 # continue
             depth_file = data_path_hand_depth_epic+epic_id+".npy"
@@ -114,8 +114,8 @@ class HandBridgeDataset(MultiThreadedDatasetBuilder):
     RELEASE_NOTES = {
         '1.0.0': 'Initial release.',
     }
-    N_WORKERS = 1  # number of parallel workers for data conversion
-    MAX_PATHS_IN_MEMORY = 1  # number of paths converted & stored in memory before writing to disk
+    N_WORKERS = 40  # number of parallel workers for data conversion
+    MAX_PATHS_IN_MEMORY = 100  # number of paths converted & stored in memory before writing to disk
     # -> the higher the faster / more parallel conversion, adjust based on avilable RAM
     # note that one path may yield multiple episodes and adjust accordingly
     PARSE_FCN = _generate_examples  # handle to parse function from file paths to RLDS episodes
