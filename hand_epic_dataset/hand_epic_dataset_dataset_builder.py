@@ -16,10 +16,9 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
     """Yields episodes for list of data paths."""
 
     def _parse_examples(demo_dict):
-        # load raw data --> this should change for your dataset
         annotation = demo_dict["annotation"]
+        # a list of file paths for the episode
         episode_paths = demo_dict["file_paths"]
-        # assemble episode --> here we're assuming demos so we set reward to 1 at the end
         episode = []
         episode_id = None
         for i, filepath in enumerate(episode_paths):
