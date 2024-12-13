@@ -55,8 +55,8 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                 print("depth image not found: ", depth_file)
                 exit()
                 #continue
-            tcp_point_3d_left = np.array([0], dtype=np.float32)
-            tcp_point_3d_right = np.array([0], dtype=np.float32)
+            tcp_point_3d_left = np.array([0,0,0], dtype=np.float32)
+            tcp_point_3d_right = np.array([0,0,0], dtype=np.float32)
             has_hand_left = False
             has_hand_right = False
             if hand_keypoint:
