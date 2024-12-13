@@ -39,7 +39,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                     hand_keypoint = pickle.load(file)
                 if not hand_keypoint:
                     print("hand keypoint not found")
-                    continue
+                    #continue
             else:
                 print("hand keypoint file not found")
                 exit()
