@@ -106,6 +106,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
             }
         }
         # if you want to skip an example for whatever reason, simply return None
+        print("episode_id: ", episode_id)
         yield str(episode_id), sample
     # for smallish datasets, use single-thread parsing
     for demo_dict in paths:
