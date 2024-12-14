@@ -56,6 +56,8 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                 #continue
             tcp_point_3d_left = np.array([0,0,0], dtype=np.float32)
             tcp_point_3d_right = np.array([0,0,0], dtype=np.float32)
+            hand_left_joints = np.zeros(42, dtype=np.float32)
+            hand_right_joints = np.zeros(42, dtype=np.float32)
             has_hand_left = False
             has_hand_right = False
             if hand_keypoint:
@@ -68,11 +70,13 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                     if hand == 0:
                         tcp_point_2d_left = hand_keypoint[0][0]
                         has_hand_left = True
+                        hand_left_joints = (hand_keypoint[2][0] * np.array([scale_x, scale_y])).flatten().astype(np.float32)
                         #scale the 2d point to the new image size
                         tcp_point_2d_left = (tcp_point_2d_left * np.array([scale_x, scale_y])).astype(float)
                         tcp_point_3d_left = np.hstack((tcp_point_2d_left, depth_kp_avg)).astype(np.float32)
                     elif hand == 1:
                         tcp_point_2d_right = hand_keypoint[0][1]
+                        hand_right_joints = (hand_keypoint[2][1] * np.array([scale_x, scale_y])).flatten().astype(np.float32)
                         has_hand_right = True
                         tcp_point_2d_right = (tcp_point_2d_right * np.array([scale_x, scale_y])).astype(float)
                         tcp_point_3d_right = np.hstack((tcp_point_2d_right, depth_kp_avg)).astype(np.float32)
@@ -84,6 +88,8 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
                                     'tcp_point_3d_right': tcp_point_3d_right,
                                     'has_hand_left': has_hand_left,
                                     'has_hand_right': has_hand_right,
+                                    'hand_left_joints': hand_left_joints,
+                                    'hand_right_joints': hand_right_joints,
                                 },
                                # 'action': example['actions'][i].astype(np.float32),
                                'discount': 1.0,
@@ -149,6 +155,16 @@ class HandBridgeDataset(MultiThreadedDatasetBuilder):
                         'has_hand_right': tfds.features.Scalar(
                             dtype=np.bool_,
                             doc='True if right hand was detected.'
+                        ),
+                        'hand_left_joints': tfds.features.Tensor(
+                            shape=(42,),
+                            dtype=np.float32,
+                            doc='x y pixel positions of all left hand joints.',
+                        ),
+                        'hand_right_joints': tfds.features.Tensor(
+                            shape=(42,),
+                            dtype=np.float32,
+                            doc='x y pixel positions of all right hand joints.',
                         ),
                     }),
                     'discount': tfds.features.Scalar(
