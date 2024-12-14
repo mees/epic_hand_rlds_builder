@@ -21,11 +21,16 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
         episode_paths = demo_dict["file_paths"]
         episode = []
         episode_id = None
+        seen_episode_keys = set()
         for i, filepath in enumerate(episode_paths):
             # print("processing image: ", filepath)
             epic_id = path_to_id(filepath, data_path_rgb_epic)
             if episode_id is None:
                 episode_id = epic_id  # Use the first epic_id as the episode ID
+                if episode_id in seen_episode_keys:
+                    print(f"Duplicate key detected: {episode_id}. Skipping.")
+                else:
+                    seen_episode_keys.add(episode_id)
             im = Image.open(filepath)
             original_width, original_height = im.size
             new_height, new_width = 224, 224
