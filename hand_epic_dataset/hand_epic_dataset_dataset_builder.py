@@ -11,7 +11,7 @@ from utils import get_depth_point, path_to_id, list_files_in_directory
 
 data_path_hand_depth_epic = "/scratch/partial_datasets/oiermees/epickitchens/frames"
 data_path_rgb_epic = "/datasets/epic100_2024-01-04_1913/frames"
-
+seen_episode_keys = set()
 def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
     """Yields episodes for list of data paths."""
 
@@ -112,6 +112,11 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
     # for smallish datasets, use single-thread parsing
     for demo_dict in paths:
         for id, sample in _parse_examples(demo_dict):
+            if id in seen_episode_keys:
+                print(f"Duplicate key detected: {id}.")
+                exit()
+            else:
+                seen_episode_keys.add(id)
             yield id, sample
 
 
