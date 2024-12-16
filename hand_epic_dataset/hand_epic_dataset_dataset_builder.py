@@ -114,7 +114,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
         for id, sample in _parse_examples(demo_dict):
             if id in seen_episode_keys:
                 print(f"Duplicate key detected: {id}.")
-                exit()
+                continue
             else:
                 seen_episode_keys.add(id)
             yield id, sample
