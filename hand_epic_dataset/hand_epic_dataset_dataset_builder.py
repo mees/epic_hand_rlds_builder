@@ -120,7 +120,7 @@ def _generate_examples(paths) -> Iterator[Tuple[str, Any]]:
             yield id, sample
 
 
-class HandBridgeDataset(MultiThreadedDatasetBuilder):
+class HandEpicDataset(MultiThreadedDatasetBuilder):
     """DatasetBuilder for example dataset."""
 
     VERSION = tfds.core.Version('1.0.0')
